@@ -1,0 +1,7 @@
+Debug\**
+Release\**
+*.vcxproj.filters
+.vs\**
+*.VC.db
+*.VC.VC.opendb
+!ext\**
