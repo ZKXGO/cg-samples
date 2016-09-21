@@ -1,7 +1,10 @@
-Debug\**
 Release\**
+Debug\**
 *.vcxproj.filters
 .vs\**
 *.VC.db
+*.VC.opendb
 *.VC.VC.opendb
-!ext\**
+*.sdf
+
+
