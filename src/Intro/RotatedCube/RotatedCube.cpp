@@ -1,5 +1,7 @@
 #include<GL/glew.h>
 #include<GL/freeglut.h>
+#include<glm.hpp>
+#include<gtx/transform.hpp>
 
 #include<iostream>
 #include<fstream>
@@ -56,20 +58,9 @@ int main(int argc, char **argv)
 	glutCreateWindow("OpenGL cube");
 
 	glewInit();
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &vertexArray);
-	glBindVertexArray(vertexArray);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	string vsh_src((istreambuf_iterator<char>(fstream("Cube.vsh"))), istreambuf_iterator<char>());
-	string fsh_src((std::istreambuf_iterator<char>(fstream("Cube.fsh"))), istreambuf_iterator<char>());
+	string vsh_src((istreambuf_iterator<char>(fstream("RotatedCube.vert"))), istreambuf_iterator<char>());
+	string fsh_src((std::istreambuf_iterator<char>(fstream("RotatedCube.frag"))), istreambuf_iterator<char>());
 
 	// Create Shader And Program Objects
 	GLenum program = glCreateProgram();
@@ -97,15 +88,27 @@ int main(int argc, char **argv)
 	int log_len;
 	glGetProgramInfoLog(program, sizeof(log) / sizeof(log[0]) - 1, &log_len, log);
 	log[log_len] = 0;
-	cout << "Shader compile result: " << log;
+	cout << "Shader compile result: " << log << endl;
 
-	// Use The Program Object Instead Of Fixed Function OpenGL
-	//	glUseProgramObjectARB(program);
+	glm::mat4x4 mvp = glm::perspectiveFovRH(45.0f, 100.0f, 100.0f, 1.0f, 3.0f) * 
+		              glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
+		              glm::rotate(60.0f, glm::vec3(1.0f, 0.5f, 0.3f));
 
+	glUseProgramObjectARB(program);
+	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, GL_FALSE, &mvp[0][0]);
+
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
+	int attribLoc = glGetAttribLocation(program, "modelPos");
+	glVertexAttribPointer(attribLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(attribLoc);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
