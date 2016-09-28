@@ -1,0 +1,95 @@
+uniform vec4 MaterialSpecular;
+uniform vec4 MaterialAmbient;
+uniform vec4 MaterialDiffuse;
+uniform float Shininess;
+
+uniform vec4 LightDiffuse;
+uniform vec4 LightAmbient;
+
+vec4 GetAmbientReflection(
+	vec4 surfaceColor,
+    vec4 lightColor) 
+{
+	return lightColor * surfaceColor;
+}
+
+vec4 GetDiffuseReflection(
+	vec4 surfaceColor,
+	vec3 surfaceNormal,
+    vec4 lightColor,
+	vec3 lightDirection) 
+{
+	float diffuseFactor = 
+		clamp(
+			dot(lightDirection, surfaceNormal),0.0,1.0);
+	return lightColor * surfaceColor * diffuseFactor;
+}
+
+vec4 GetSpecularReflection(
+	vec4 surfaceColor,
+    float  surfaceShininess,
+    vec3 surfaceNormal,
+    vec4 lightColor,
+    vec3 halfAngle) 
+{
+	float specularFactor = 
+	   pow(clamp(dot(halfAngle, surfaceNormal),0.0,1.0), surfaceShininess);
+  
+	return lightColor * surfaceColor * specularFactor;       
+}
+
+vec4 GetBlinnReflection(
+	vec4 ambientSurfaceColor,
+    vec4 ambientLightColor,
+    vec4 diffuseSurfaceColor,
+    vec4 specularSurfaceColor,
+    float  surfaceShininess,
+    vec3 surfaceNormal,
+    vec3 halfAngle,
+    vec3 lightDirection,
+    vec4 lightColor) {
+                       
+	vec4 ambient = GetAmbientReflection(ambientSurfaceColor, ambientLightColor);
+
+	vec4 diffuse = GetDiffuseReflection(
+		diffuseSurfaceColor, 
+		surfaceNormal, 
+		lightColor, 
+		lightDirection);
+                                     
+	vec4 specular = GetSpecularReflection(
+		specularSurfaceColor, 
+		surfaceShininess, 
+		surfaceNormal,
+		lightColor, 
+		halfAngle);
+
+	if (dot(lightDirection, surfaceNormal) <= 0.0)
+	{
+		specular = vec4(0.0, 0.0, 0.0, 0.0);
+	}
+    
+	return diffuse + specular + ambient;
+}
+
+varying vec3 eyeSurfaceNormal;
+varying vec3 eyeLightDirection;
+varying vec3 eyeSurfacePosition;
+
+void main()
+{
+	vec3 nEyeLightDir = normalize(eyeLightDirection);
+	vec3 eyeViewerDirection = normalize(-eyeSurfacePosition);
+	vec3 eyeHalfAngle = normalize(normalize(eyeViewerDirection) + nEyeLightDir);
+
+	gl_FragColor = GetBlinnReflection(
+		MaterialDiffuse, 
+		LightAmbient,
+		MaterialDiffuse, 
+		MaterialSpecular, 
+		Shininess,
+		eyeSurfaceNormal, 
+		eyeHalfAngle,
+		nEyeLightDir, 
+		LightDiffuse);
+}

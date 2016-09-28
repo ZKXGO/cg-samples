@@ -10,47 +10,66 @@
 #include<chrono>
 #include<numeric>
 
+#include"shaders.hpp"
+
 using namespace std;
 
 #pragma pack(1)
 struct Vertex
 {
-	float x, y, z;
+	glm::vec3 position;
+	glm::vec3 normal;
 };
 #pragma pack()
 
-Vertex cube_vertices[] = {
-	{ -0.5f, -0.5f, -0.5f },
-	{ -0.5f, 0.5f, -0.5f },
-	{ 0.5f, 0.5f, -0.5f },
-	{ 0.5f, -0.5f, -0.5f },
-	{ -0.5f, -0.5f, 0.5f },
-	{ -0.5f, 0.5f, 0.5f },
-	{ 0.5f, 0.5f, 0.5f },
-	{ 0.5f, -0.5f, 0.5f }
-};
+const int N1 = 60;
+const int N2 = 30;
 
-GLuint cube_indices[] = {
-	0,1,2,3,
-	4,5,6,7,
-	0,1,5,4,
-	1,2,6,5,
-	2,3,7,6,
-	3,0,4,7
-};
+Vertex torus_vertices[N1 * N2];
+GLuint torus_indices[N1* N2 * 4];
+
+const double Pi = 3.14159265358979323846;
+
+void MakeTorus(double r1, double r2) {
+	int iidx = 0;
+	for (int i = 0; i<N1; i++) {
+		int i2 = (i<N1 - 1) ? (i + 1) : (0);
+		double phi = 2 * i*Pi / N1;
+		for (int j = 0; j<N2; j++) {
+			int j2 = (j<N2 - 1) ? (j + 1) : (0);
+			double psi = 2 * j*Pi / N2;
+
+			double nx = cos(phi)*cos(psi);
+			double ny = sin(psi);
+			double nz = sin(phi)*cos(psi);
+
+			torus_vertices[i * N2 + j].position = glm::vec3(r1*cos(phi) + r2*nx, r2*ny, r1*sin(phi) + r2*nz);
+			torus_vertices[i * N2 + j].normal = glm::vec3(nx,ny,nz);
+
+			torus_indices[iidx++] = i *N2 + j;
+			torus_indices[iidx++] = i *N2 + j2;
+			torus_indices[iidx++] = i2 * N2 + j2;
+			torus_indices[iidx++] = i2 * N2 + j;
+		}
+	}
+}
 
 GLuint vertexBuffer;
 GLuint vertexArray;
 GLuint program;
 GLuint mvpLoc;
+GLuint mvLoc;
+GLuint nmLoc;
 
 float xAngle = 0;
 float yAngle = 0;
 
-bool init() 
+bool init()
 {
-	string vsh_src((istreambuf_iterator<char>(fstream("AnimatedCube.vert"))), istreambuf_iterator<char>());
-	string fsh_src((std::istreambuf_iterator<char>(fstream("AnimatedCube.frag"))), istreambuf_iterator<char>());
+	MakeTorus(0.5, 0.1);
+
+	string vsh_src((istreambuf_iterator<char>(fstream("GourandVertex.glsl"))), istreambuf_iterator<char>());
+	string fsh_src((std::istreambuf_iterator<char>(fstream("GourandFragment.glsl"))), istreambuf_iterator<char>());
 
 	// Create Shader And Program Objects
 	program = glCreateProgram();
@@ -81,21 +100,27 @@ bool init()
 	cout << "Shader compile result: " << log << endl;
 
 	mvpLoc = glGetUniformLocation(program, "mvp");
+	mvLoc = glGetUniformLocation(program, "mv");
+	nmLoc = glGetUniformLocation(program, "nm");
 
 	glUseProgramObjectARB(program);
 
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(torus_vertices), torus_vertices, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &vertexArray);
 	glBindVertexArray(vertexArray);
-	int attribLoc = glGetAttribLocation(program, "modelPos");
-	glVertexAttribPointer(attribLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(attribLoc);
+	int posLoc = glGetAttribLocation(program, "position");
+	glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glEnableVertexAttribArray(posLoc);
+	int normLoc = glGetAttribLocation(program, "normal");
+	glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(normLoc);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_DEPTH_TEST);
 }
 
 vector<float> times(10);
@@ -123,24 +148,29 @@ void idle(void) {
 		times.push_back(delta);
 
 		double avg = accumulate(times.begin(), times.end(), 0.0) / times.size();
-		xAngle += 0.00005 * avg;
-		yAngle -= 0.00003 * avg;
+		xAngle += 0.000005 * avg;
+		yAngle -= 0.000003 * avg;
 
 	}
 }
 
 void display(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);	
 
-	glm::mat4x4 mvp = glm::perspectiveFovRH(45.0f, 100.0f, 100.0f, 1.0f, 3.0f) *
+	glm::mat4x4 proj = glm::perspectiveFovRH(45.0f, 100.0f, 100.0f, 1.0f, 3.0f);
+	glm::mat4x4 mv = 
 		glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
 		glm::rotate(xAngle, glm::vec3(1.0f, 0.0f, 0.0f)) *
-		glm::rotate(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::rotate(yAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4x4 mvp = proj * mv;
+	glm::mat3x3 nm = glm::transpose(glm::inverse(glm::mat3x3(mv)));
 
 	glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(mvLoc, 1, GL_FALSE, &mv[0][0]);
+	glUniformMatrix3fv(nmLoc, 1, GL_FALSE, &nm[0][0]);
 
-	glDrawElements(GL_QUADS, sizeof(cube_indices) / sizeof(cube_indices[0]), GL_UNSIGNED_INT, cube_indices);
+	glDrawElements(GL_QUADS, sizeof(torus_indices) / sizeof(torus_indices[0]), GL_UNSIGNED_INT, torus_indices);
 	glFlush(); // Гарантируем выполнение всех операций: попробуйте закомментировать :)
 	glutPostRedisplay();
 }
@@ -148,7 +178,7 @@ void display(void)
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB);
+	glutInitDisplayMode(GLUT_RGB|GLUT_DEPTH);
 	glutCreateWindow("OpenGL cube");
 
 	glewInit();
