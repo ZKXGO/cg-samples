@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Empty", "..\..\src\Intro\Empty\Empty.vcxproj", "{2DD4D4A4-93C2-4CD2-A8AE-D7B9A9CDB66A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cube", "..\..\src\Intro\Cube\Cube.vcxproj", "{A0AC0E84-EA85-406E-B10F-CAD8721483FA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RotatedCube", "..\..\src\Intro\RotatedCube\RotatedCube.vcxproj", "{7EB9799E-5EB3-416E-B455-DBF64FF57A3F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimatedCube", "..\..\src\Intro\AnimatedCube\AnimatedCube.vcxproj", "{C5D56D49-F379-49FB-88BF-105577978F86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,14 @@ Global
 		{7EB9799E-5EB3-416E-B455-DBF64FF57A3F}.Release|x64.Build.0 = Release|x64
 		{7EB9799E-5EB3-416E-B455-DBF64FF57A3F}.Release|x86.ActiveCfg = Release|Win32
 		{7EB9799E-5EB3-416E-B455-DBF64FF57A3F}.Release|x86.Build.0 = Release|Win32
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Debug|x64.ActiveCfg = Debug|x64
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Debug|x64.Build.0 = Debug|x64
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Debug|x86.ActiveCfg = Debug|Win32
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Debug|x86.Build.0 = Debug|Win32
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Release|x64.ActiveCfg = Release|x64
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Release|x64.Build.0 = Release|x64
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Release|x86.ActiveCfg = Release|Win32
+		{C5D56D49-F379-49FB-88BF-105577978F86}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
