@@ -38,14 +38,25 @@ GLuint cube_indices[] = {
 
 GLuint vertexBuffer;
 GLuint vertexArray;
+GLuint program;
+
+glm::mat4x4 proj;
 
 void reshape(int w, int h)
 {
+	proj = glm::perspectiveFovRH(45.0f, float(w), float(h), 1.0f, 3.0f);
 	glViewport(0, 0, w, h); // Область рисования -- все окно
 }
 
 void display(void)
 {
+	glm::mat4x4 mvp = proj *
+		glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
+		glm::rotate(60.0f, glm::vec3(1.0f, 0.5f, 0.3f));
+
+	glUseProgramObjectARB(program);
+	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, GL_FALSE, &mvp[0][0]);
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawElements(GL_QUADS, sizeof(cube_indices) / sizeof(cube_indices[0]), GL_UNSIGNED_INT, cube_indices);
 	glFlush(); // Гарантируем выполнение всех операций: попробуйте закомментировать :)
@@ -55,7 +66,7 @@ int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB);
-	glutCreateWindow("OpenGL cube");
+	glutCreateWindow("Rotated cube");
 
 	glewInit();
 
@@ -63,7 +74,7 @@ int main(int argc, char **argv)
 	string fsh_src((std::istreambuf_iterator<char>(fstream("RotatedCube.frag"))), istreambuf_iterator<char>());
 
 	// Create Shader And Program Objects
-	GLenum program = glCreateProgram();
+	program = glCreateProgram();
 	GLenum vertex_shader = glCreateShader(GL_VERTEX_SHADER_ARB);
 	GLenum fragment_shader = glCreateShader(GL_FRAGMENT_SHADER_ARB);
 
@@ -89,13 +100,6 @@ int main(int argc, char **argv)
 	glGetProgramInfoLog(program, sizeof(log) / sizeof(log[0]) - 1, &log_len, log);
 	log[log_len] = 0;
 	cout << "Shader compile result: " << log << endl;
-
-	glm::mat4x4 mvp = glm::perspectiveFovRH(45.0f, 100.0f, 100.0f, 1.0f, 3.0f) * 
-		              glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
-		              glm::rotate(60.0f, glm::vec3(1.0f, 0.5f, 0.3f));
-
-	glUseProgramObjectARB(program);
-	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, GL_FALSE, &mvp[0][0]);
 
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

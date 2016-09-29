@@ -1,10 +1,12 @@
-uniform vec4 MaterialSpecular;
-uniform vec4 MaterialAmbient;
-uniform vec4 MaterialDiffuse;
-uniform float Shininess;
+#version 330 core
 
-uniform vec4 LightDiffuse;
-uniform vec4 LightAmbient;
+uniform vec4 MaterialSpecular = vec4(0.9,0.9,0.9,1.0);
+uniform vec4 MaterialAmbient = vec4(0.2,0.2,0.2,1.0);
+uniform vec4 MaterialDiffuse = vec4(0.7,0.7,0.7,1.0);
+uniform float Shininess = 10.0;
+
+uniform vec4 LightDiffuse = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 LightAmbient = vec4(0.2,0.2,0.2,1.0);
 
 vec4 GetAmbientReflection(
 	vec4 surfaceColor,
@@ -72,9 +74,11 @@ vec4 GetBlinnReflection(
 	return diffuse + specular + ambient;
 }
 
-varying vec3 eyeSurfaceNormal;
-varying vec3 eyeLightDirection;
-varying vec3 eyeSurfacePosition;
+in vec3 eyeSurfaceNormal;
+in vec3 eyeLightDirection;
+in vec3 eyeSurfacePosition;
+
+out vec4 color;
 
 void main()
 {
@@ -82,7 +86,7 @@ void main()
 	vec3 eyeViewerDirection = normalize(-eyeSurfacePosition);
 	vec3 eyeHalfAngle = normalize(normalize(eyeViewerDirection) + nEyeLightDir);
 
-	gl_FragColor = GetBlinnReflection(
+	color = GetBlinnReflection(
 		MaterialDiffuse, 
 		LightAmbient,
 		MaterialDiffuse, 

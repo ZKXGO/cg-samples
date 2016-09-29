@@ -10,8 +10,6 @@
 #include<chrono>
 #include<numeric>
 
-#include"shaders.hpp"
-
 using namespace std;
 
 #pragma pack(1)
@@ -68,8 +66,8 @@ bool init()
 {
 	MakeTorus(0.5, 0.1);
 
-	string vsh_src((istreambuf_iterator<char>(fstream("GourandVertex.glsl"))), istreambuf_iterator<char>());
-	string fsh_src((std::istreambuf_iterator<char>(fstream("GourandFragment.glsl"))), istreambuf_iterator<char>());
+	string vsh_src((istreambuf_iterator<char>(fstream("BlinnVertex.glsl"))), istreambuf_iterator<char>());
+	string fsh_src((std::istreambuf_iterator<char>(fstream("BlinnFragment.glsl"))), istreambuf_iterator<char>());
 
 	// Create Shader And Program Objects
 	program = glCreateProgram();
@@ -127,8 +125,11 @@ vector<float> times(10);
 chrono::steady_clock::time_point prevFrame;
 bool firstFrame;
 
+glm::mat4x4 proj;
+
 void reshape(int w, int h)
 {
+	proj = glm::perspectiveFovRH(90.0f, float(w), float(h), 1.0f, 3.0f);
 	glViewport(0, 0, w, h); // Область рисования -- все окно
 	times.clear();
 	firstFrame = true;
@@ -158,7 +159,6 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);	
 
-	glm::mat4x4 proj = glm::perspectiveFovRH(45.0f, 100.0f, 100.0f, 1.0f, 3.0f);
 	glm::mat4x4 mv = 
 		glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
 		glm::rotate(xAngle, glm::vec3(1.0f, 0.0f, 0.0f)) *
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB|GLUT_DEPTH);
-	glutCreateWindow("OpenGL cube");
+	glutCreateWindow("Torus with lighting");
 
 	glewInit();
 
