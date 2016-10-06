@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Empty", "..\..\src\Intro\Empty\Empty.vcxproj", "{2DD4D4A4-93C2-4CD2-A8AE-D7B9A9CDB66A}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimatedCube", "..\..\src\Intro\AnimatedCube\AnimatedCube.vcxproj", "{C5D56D49-F379-49FB-88BF-105577978F86}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TorusLighting", "..\..\src\Intro\TorusLighting\TorusLighting.vcxproj", "{7D68B385-07F7-4396-9F91-824197888851}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texture", "..\..\src\Intro\Texture\Texture.vcxproj", "{773AD329-40A3-4A67-81B9-63E8F8FA6524}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,14 @@ Global
 		{7D68B385-07F7-4396-9F91-824197888851}.Release|x64.Build.0 = Release|x64
 		{7D68B385-07F7-4396-9F91-824197888851}.Release|x86.ActiveCfg = Release|Win32
 		{7D68B385-07F7-4396-9F91-824197888851}.Release|x86.Build.0 = Release|Win32
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Debug|x64.ActiveCfg = Debug|x64
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Debug|x64.Build.0 = Debug|x64
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Debug|x86.ActiveCfg = Debug|Win32
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Debug|x86.Build.0 = Debug|Win32
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Release|x64.ActiveCfg = Release|x64
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Release|x64.Build.0 = Release|x64
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Release|x86.ActiveCfg = Release|Win32
+		{773AD329-40A3-4A67-81B9-63E8F8FA6524}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -153,8 +153,12 @@
     <ClCompile Include="TorusLighting.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BlinnFragment.glsl" />
-    <None Include="BlinnVertex.glsl" />
+    <None Include="BlinnFragment.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="BlinnVertex.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="GourandFragment.glsl" />
     <None Include="GourandVertex.glsl" />
   </ItemGroup>
