@@ -56,6 +56,7 @@ int main(int argc, char **argv)
 	glutCreateWindow("OpenGL cube");
 
 	glewInit();
+
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);

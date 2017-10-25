@@ -4,11 +4,15 @@ uniform vec4 LightPosition = vec4(0,0,0,1);
 
 in vec3 position;
 in vec3 normal;
+in vec3 tangent;
+in vec3 binormal;
 in vec2 tex;
 
 out vec3 eyeSurfaceNormal;
 out vec3 eyeLightDirection;
 out vec3 eyeSurfacePosition;
+out vec3 eyeTangent;
+out vec3 eyeBinormal;
 out vec2 texCoords;
 
 uniform mat4 mv;
@@ -23,8 +27,12 @@ void main()
 
 	eyeSurfaceNormal   = normalize(nm * normal);
 	eyeLightDirection  = normalize(eyeLightPosition - eyeSurfacePosition);
-
-	texCoords = vec2(tex.x*5, tex.y);
 	
+	eyeBinormal = normalize(nm * binormal);
+	eyeTangent = normalize(nm * tangent);
+	
+	gl_Position = mvp * pos;
+	texCoords = vec2(5.0 * tex.x, tex.y);
+
 	gl_Position = mvp * vec4(position, 1);
 }

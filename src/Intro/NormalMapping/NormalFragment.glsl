@@ -8,7 +8,7 @@ uniform float Shininess = 10.0;
 uniform vec4 LightDiffuse = vec4(1.0,1.0,1.0,1.0);
 uniform vec4 LightAmbient = vec4(0.2,0.2,0.2,1.0);
 
-uniform sampler2D colormap;
+uniform sampler2D normalMap;
 
 vec4 GetAmbientReflection(
 	vec4 surfaceColor,
@@ -76,28 +76,29 @@ vec4 GetBlinnReflection(
 	return diffuse + specular + ambient;
 }
 
+
 in vec3 eyeSurfaceNormal;
 in vec3 eyeLightDirection;
 in vec3 eyeSurfacePosition;
+in vec3 eyeTangent;
+in vec3 eyeBinormal;
 in vec2 texCoords;
 
-out vec4 color;
-
 void main()
-{
-	vec3 nEyeLightDir = normalize(eyeLightDirection);
+{	
 	vec3 eyeViewerDirection = normalize(-eyeSurfacePosition);
+	vec3 nEyeLightDir = normalize(eyeLightDirection);
 	vec3 eyeHalfAngle = normalize(normalize(eyeViewerDirection) + nEyeLightDir);
 
-	vec4 materialDiffuse = texture2D(colormap, texCoords.xy);
+	vec3 bump = (texture2D(normalMap, texCoords.xy).rgb - vec3(0.5, 0.5, 0.5)) * 2.0;
 
-	color = GetBlinnReflection(
+    gl_FragColor = GetBlinnReflection(
 		MaterialDiffuse, 
 		LightAmbient,
-		materialDiffuse, 
-		/*MaterialSpecular*/materialDiffuse, 
+		MaterialDiffuse, 
+		MaterialSpecular, 
 		Shininess,
-		eyeSurfaceNormal, 
+		normalize(bump.r * eyeSurfaceNormal + bump.b * eyeBinormal + bump.g * eyeTangent), 
 		eyeHalfAngle,
 		nEyeLightDir, 
 		LightDiffuse);

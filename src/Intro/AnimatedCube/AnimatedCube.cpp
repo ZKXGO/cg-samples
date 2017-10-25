@@ -49,6 +49,10 @@ float yAngle = 0;
 
 bool init() 
 {
+	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
+
 	string vsh_src((istreambuf_iterator<char>(fstream("AnimatedCube.vert"))), istreambuf_iterator<char>());
 	string fsh_src((std::istreambuf_iterator<char>(fstream("AnimatedCube.frag"))), istreambuf_iterator<char>());
 
@@ -95,7 +99,7 @@ bool init()
 	glEnableVertexAttribArray(attribLoc);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 vector<float> times(10);
@@ -126,15 +130,16 @@ void idle(void) {
 		times.push_back(delta);
 
 		double avg = accumulate(times.begin(), times.end(), 0.0) / times.size();
-		xAngle += 0.00005 * avg;
-		yAngle -= 0.00003 * avg;
+		xAngle += 0.000005 * avg;
+		yAngle -= 0.000003 * avg;
 
 	}
+	glutPostRedisplay();
 }
 
 void display(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4x4 mvp = proj *
 		glm::translate(glm::vec3(0.0f, 0.0f, -3.0f)) *
@@ -145,13 +150,13 @@ void display(void)
 
 	glDrawElements(GL_QUADS, sizeof(cube_indices) / sizeof(cube_indices[0]), GL_UNSIGNED_INT, cube_indices);
 	glFlush(); // Гарантируем выполнение всех операций: попробуйте закомментировать :)
-	glutPostRedisplay();
+
 }
 
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB);
+	glutInitDisplayMode(GLUT_RGB|GLUT_DEPTH);
 	glutCreateWindow("Animated cube");
 
 	glewInit();

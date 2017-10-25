@@ -161,7 +161,7 @@ glm::mat4x4 proj;
 
 void reshape(int w, int h)
 {
-	proj = glm::perspectiveFovRH(90.0f, float(w), float(h), 1.0f, 3.0f);
+	proj = glm::perspectiveFovRH(45.0f, float(w), float(h), 0.1f, 3.0f);
 	glViewport(0, 0, w, h); // Область рисования -- все окно
 	times.clear();
 	firstFrame = true;
@@ -192,7 +192,7 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4x4 mv =
-		glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
+		glm::translate(glm::vec3(0.0f, 0.0f, -1.2f)) *
 		glm::rotate(xAngle, glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(yAngle, glm::vec3(0.0f, 0.0f, 1.0f));
 	glm::mat4x4 mvp = proj * mv;

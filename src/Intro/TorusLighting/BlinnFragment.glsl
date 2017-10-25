@@ -92,7 +92,7 @@ void main()
 		MaterialDiffuse, 
 		MaterialSpecular, 
 		Shininess,
-		eyeSurfaceNormal, 
+		normalize(eyeSurfaceNormal), 
 		eyeHalfAngle,
 		nEyeLightDir, 
 		LightDiffuse);
