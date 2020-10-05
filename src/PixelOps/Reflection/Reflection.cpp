@@ -117,6 +117,8 @@ void display(void)
 	glPushMatrix();
 	glScaled(1, -1, 1);
 						
+	glDisable(GL_STENCIL_TEST);
+
 	glLightfv(GL_LIGHT0, GL_POSITION, l_position);
 	RenderObjects();
 	glPopMatrix();

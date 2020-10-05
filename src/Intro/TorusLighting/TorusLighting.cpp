@@ -117,7 +117,7 @@ bool init()
 	glEnableVertexAttribArray(normLoc);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_DEPTH_TEST);
 }
 

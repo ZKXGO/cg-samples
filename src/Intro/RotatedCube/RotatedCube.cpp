@@ -52,7 +52,7 @@ void display(void)
 {
 	glm::mat4x4 mvp = proj *
 		glm::translate(glm::vec3(0.0f, 0.0f, -2.0f)) *
-		glm::rotate(60.0f, glm::vec3(1.0f, 0.5f, 0.3f));
+		glm::rotate(60.0f, glm::vec3(0.0f, 1.0f, 0.0f)); // *v
 
 	glUseProgramObjectARB(program);
 	glUniformMatrix4fv(glGetUniformLocation(program, "mvp"), 1, GL_FALSE, &mvp[0][0]);

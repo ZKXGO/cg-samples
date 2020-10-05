@@ -1,6 +1,6 @@
 #version 330 core
 
-uniform vec4 MaterialSpecular = vec4(0.9,0.9,0.9,1.0);
+uniform vec4 MaterialSpecular = vec4(0.2,0.2,0.9,1.0);
 uniform vec4 MaterialAmbient = vec4(0.2,0.2,0.2,1.0);
 uniform vec4 MaterialDiffuse = vec4(0.7,0.7,0.7,1.0);
 uniform float Shininess = 10.0;
@@ -95,7 +95,7 @@ void main()
 		MaterialDiffuse, 
 		LightAmbient,
 		materialDiffuse, 
-		/*MaterialSpecular*/materialDiffuse, 
+		MaterialSpecular, 
 		Shininess,
 		eyeSurfaceNormal, 
 		eyeHalfAngle,

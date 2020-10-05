@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Empty", "..\..\src\Intro\Empty\Empty.vcxproj", "{2DD4D4A4-93C2-4CD2-A8AE-D7B9A9CDB66A}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texture", "..\..\src\Intro\Texture\Texture.vcxproj", "{773AD329-40A3-4A67-81B9-63E8F8FA6524}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NormalMapping", "..\..\src\Intro\NormalMapping\NormalMapping.vcxproj", "{2391A6B7-B291-4643-8312-D915D695026C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimatedModel", "..\..\src\Intro\AnimatedModel\AnimatedModel.vcxproj", "{E9E64473-463F-46C2-92D4-C9CB839C6CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,14 @@ Global
 		{2391A6B7-B291-4643-8312-D915D695026C}.Release|x64.Build.0 = Release|x64
 		{2391A6B7-B291-4643-8312-D915D695026C}.Release|x86.ActiveCfg = Release|Win32
 		{2391A6B7-B291-4643-8312-D915D695026C}.Release|x86.Build.0 = Release|Win32
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Debug|x64.ActiveCfg = Debug|x64
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Debug|x64.Build.0 = Debug|x64
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Debug|x86.ActiveCfg = Debug|Win32
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Debug|x86.Build.0 = Debug|Win32
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Release|x64.ActiveCfg = Release|x64
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Release|x64.Build.0 = Release|x64
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Release|x86.ActiveCfg = Release|Win32
+		{E9E64473-463F-46C2-92D4-C9CB839C6CE5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

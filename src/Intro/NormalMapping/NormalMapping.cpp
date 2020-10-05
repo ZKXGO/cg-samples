@@ -175,7 +175,7 @@ bool init()
 	glUniform1ui(texLoc, textureID);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_DEPTH_TEST);
 }
 

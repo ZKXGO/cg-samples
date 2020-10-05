@@ -150,13 +150,14 @@ void display(void)
 
 	glDrawElements(GL_QUADS, sizeof(cube_indices) / sizeof(cube_indices[0]), GL_UNSIGNED_INT, cube_indices);
 	glFlush(); // Гарантируем выполнение всех операций: попробуйте закомментировать :)
+	glutSwapBuffers();
 
 }
 
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB|GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGB|GLUT_DEPTH|GLUT_DOUBLE);
 	glutCreateWindow("Animated cube");
 
 	glewInit();
